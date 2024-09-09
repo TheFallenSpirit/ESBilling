@@ -1,0 +1,26 @@
+{
+	"name": "es-billing",
+	"type": "module",
+	"packageManager": "yarn@4.4.1",
+	"dependencies": {
+		"@lemonsqueezy/lemonsqueezy.js": "^3.2.0",
+		"body-parser": "^1.20.2",
+		"dayjs": "^1.11.13",
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"ioredis": "^5.4.1",
+		"mongoose": "^8.6.1"
+	},
+	"devDependencies": {
+		"@types/body-parser": "^1",
+		"@types/express": "^4",
+		"@types/node": "^22.5.3",
+		"tsc-alias": "^1.8.10",
+		"typescript": "^5.5.4"
+	},
+	"scripts": {
+		"build": "rm -r build/; tsc; tsc-alias",
+		"dev": "yarn run build; yarn run start --dev",
+		"start": "node -r dotenv/config build/app.js"
+	}
+}
