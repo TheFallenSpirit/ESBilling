@@ -6,9 +6,9 @@ import dayjs from 'dayjs';
 import utcPlugin from 'dayjs/plugin/utc.js';
 import advancedFormatPlugin from 'dayjs/plugin/advancedFormat.js';
 import { connect } from 'mongoose';
-import subscriptionUpdated from './events/subscriptionUpdated';
-import subscriptionCreated from './events/subscriptionCreated';
-import subscriptionExpired from './events/subscriptionExpired';
+import subscriptionUpdated from './events/updated';
+import subscriptionCreated from './events/created';
+import subscriptionExpired from './events/expired';
 
 if (!process.env.BOT_ID || !process.env.LS_SECRET || !process.env.BOT_TOKEN || !process.env.MONGO_URL || !process.env.REDIS_URL) {
     console.error('[ENV] Please specify BOT_ID, LS_SECRET, BOT_TOKEN, MONGO_URL, and REDIS_URL environment variables!');
@@ -33,8 +33,6 @@ app.post('/', bodyParser.raw({ type: 'application/json' }), async (req, res) => 
         return res.status(401).send({ error: 'Invalid "X-Signature" header provided.' });
 
     const body: WebhookPayload<CustomData> = JSON.parse(req.body.toString());
-
-    console.log(body);
 
     switch (body.meta.event_name) {
         case 'subscription_created': await subscriptionCreated(body); break;

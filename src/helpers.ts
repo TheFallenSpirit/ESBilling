@@ -1,26 +1,4 @@
 import { SubscriptionI } from './models/Subscription';
-import { redis } from './store';
-
-const getChannelId = async (userId: string) => await fetch('https://discord.com/api/v10/users/@me/channels', {
-    method: 'POST',
-    body: JSON.stringify({ recipient_id: userId }),
-    headers: { 'Content-Type': 'application/json', Authorization: `Bot ${process.env.BOT_TOKEN}` }
-}).then(async (res) => await res.json()).then(async (body) => {
-    await redis.set(`es_dm_channel:${userId}`, body.id);
-    return body.id as string;
-}).catch(() => null);
-
-export const sendDM = async (userId: string, content: string) => {
-    let channelId = await redis.get(`es_dm_channel:${userId}`);
-    if (!channelId) channelId = await getChannelId(userId);
-    if (!channelId) return false;
-
-    return await fetch(`https://discord.com/api/v10/channels/${channelId}/messages`, {
-        method: 'POST',
-        body: JSON.stringify({ content }),
-        headers: { 'Content-Type': 'application/json',Authorization: `Bot ${process.env.BOT_TOKEN}` }
-    }).then(() => true).catch(() => false);
-};
 
 interface User {
     id: string;

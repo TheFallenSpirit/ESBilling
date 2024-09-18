@@ -1,4 +1,4 @@
-import { getForName, getUser, sendDM } from '../helpers';
+import { getForName, getUser } from '../helpers';
 import Subscription from '../models/Subscription';
 import { getSubscription, redis, updateGuild, updateProfile } from '../store';
 import { CustomData, WebhookPayload } from '../types';

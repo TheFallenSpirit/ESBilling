@@ -1,5 +1,5 @@
 import config from '../config';
-import { getGuild, getUser, sendDM } from '../helpers';
+import { getGuild, getUser } from '../helpers';
 import Subscription, { SubscriptionI } from '../models/Subscription';
 import { redis, replacer, updateGuild, updateProfile } from '../store';
 import { CustomData, WebhookPayload } from '../types';
@@ -35,7 +35,7 @@ export default async (body: WebhookPayload<CustomData>) => {
             ];
 
             await redis.lpush(`es_queue:${process.env.BOT_ID}:billing`, JSON.stringify({
-                force: true, user: subscription.activeUserId, content: { content: lines.join('') }
+                force: true, user: subscription.subscriberId, content: { content: lines.join('') }
             }));
 
             let gifterName = 'unknown user';
