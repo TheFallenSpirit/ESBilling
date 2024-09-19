@@ -12,7 +12,10 @@ type SubscriptionEventNames =
     | 'subscription_updated'
     | 'subscription_expired'
     | 'subscription_paused'
-    | 'subscription_unpaused';
+    | 'subscription_unpaused'
+    | 'subscription_payment_success'
+    | 'subscription_payment_failed'
+    | 'subscription_payment_recovered';
 
 export type WebhookPayload<CustomData = any> = {
     meta: {

@@ -20,7 +20,6 @@
 	},
 	"scripts": {
 		"build": "rm -r build/; tsc; tsc-alias",
-		"dev": "yarn run build; yarn run start --dev",
-		"start": "node -r dotenv/config build/app.js"
+		"dev": "pnpm run build; node -r dotenv/config build/app.js --dev"
 	}
 }

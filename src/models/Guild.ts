@@ -1,6 +1,5 @@
 // This is not the full ES guild schema, only a cut down version of it.
 
-
 import { model, Schema } from 'mongoose';
 
 export interface GuildI {
