@@ -32,7 +32,7 @@ export default async (body: WebhookPayload<CustomData>) => {
             if (activeUser) activeName = activeUser.global_name ? `${activeUser.global_name} (${activeUser.username})` : activeUser.username;
 
             const lines = [
-                `Thank you for gifting ${planName}! `,
+                `:tada: Thank you for gifting ${planName}! `,
                 `Your gift to ${activeName} has been added to your subscriptions.\n${config.manageMessage}`
             ];
 
