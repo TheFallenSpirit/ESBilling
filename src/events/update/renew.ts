@@ -9,7 +9,7 @@ export default async (subscription: SubscriptionI, body: WebhookPayload<CustomDa
     const forName = await getForName(subscription);
 
     const lines = [
-        `Your ${body.data.attributes.product_name} subscription${forName ? `for ${forName}` : ''} has been renewed.`,
+        `Your ${body.data.attributes.product_name} subscription${forName ? ` for ${forName}` : ''} has been renewed.`,
         ` You will be charged next on ${dayjs.utc(renewsAt).format('MMMM Do, YYYY')}. ${config.manageMessage}`
     ];
 
