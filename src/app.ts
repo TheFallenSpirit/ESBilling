@@ -26,14 +26,16 @@ await connect(process.env.MONGO_URL, { dbName: dev ? 'dev' : 'bot' }).then(() =>
 }).catch(() => console.log('[DATABASE] Failed to connect to MongoDB.'));
 
 app.get('/health', (req, res) => {
-    res.status(200).json({ status: 'online' });
+    res.status(200).send({ status: 'online' });
 });
 
 app.post('/', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
+    if (!req.body || typeof req.body !== 'object' || Object.entries(req.body).length < 1)
+        return res.status(401).send({ error: 'Invalid request body provided.' });
+
     const hmac = createHmac('sha256', process.env.LS_SECRET!);
     const digest = Buffer.from(hmac.update(req.body).digest('hex'), 'utf-8');
     const signature = Buffer.from(typeof req.headers['x-signature'] === 'string' ? req.headers['x-signature'] : '', 'utf-8');
-
     if (digest.length !== signature.length || !timingSafeEqual(digest, signature))
         return res.status(401).send({ error: 'Invalid "X-Signature" header provided.' });
 
