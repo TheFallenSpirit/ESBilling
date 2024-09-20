@@ -24,6 +24,10 @@ await connect(process.env.MONGO_URL, { dbName: dev ? 'dev' : 'bot' }).then(() =>
     console.log('[DATABASE] Successfully connected to MongoDB.');
 }).catch(() => console.log('[DATABASE] Failed to connect to MongoDB.'));
 
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'online' });
+});
+
 app.post('/', bodyParser.raw({ type: 'application/json' }), async (req, res) => {
     const hmac = createHmac('sha256', process.env.LS_SECRET!);
     const digest = Buffer.from(hmac.update(req.body).digest('hex'), 'utf-8');

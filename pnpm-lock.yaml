@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@lemonsqueezy/lemonsqueezy.js':
-        specifier: ^3.2.0
-        version: 3.3.1
       body-parser:
         specifier: ^1.20.2
         version: 1.20.3
@@ -50,10 +47,6 @@ packages:
 
   '@ioredis/commands@1.2.0':
     resolution: {integrity: sha512-Sx1pU8EM64o2BrqNpEO1CNLtKQwyhuXuqyfH7oGKCk+1a33d2r5saW8zNwm3j6BTExtjrv2BxTgzzkMwts6vGg==}
-
-  '@lemonsqueezy/lemonsqueezy.js@3.3.1':
-    resolution: {integrity: sha512-gM/FdNsK3BlrD6JRrhmiyqBXQsCpzSUdKSoZwJMQfXqfqcK321og+uMssc6HYcygUMrGvPnNJyJ1RqZPFDrgtg==}
-    engines: {node: '>=20'}
 
   '@mongodb-js/saslprep@1.1.9':
     resolution: {integrity: sha512-tVkljjeEaAhCqTzajSdgbQ6gE6f3oneVwa3iXR6csiEwXXOFsiC6Uh9iAjAhXPtqa/XMDHWjjeNH/77m/Yq2dw==}
@@ -620,8 +613,6 @@ packages:
 snapshots:
 
   '@ioredis/commands@1.2.0': {}
-
-  '@lemonsqueezy/lemonsqueezy.js@3.3.1': {}
 
   '@mongodb-js/saslprep@1.1.9':
     dependencies:
