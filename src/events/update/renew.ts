@@ -9,8 +9,8 @@ export default async (subscription: SubscriptionI, body: WebhookPayload<CustomDa
     const forName = await getForName(subscription);
 
     const lines = [
-        `Your ${body.data.attributes.product_name} subscription${forName ? `for ${forName}` : ''} has been renewed. `,
-        `You will be charged next on ${dayjs.utc(renewsAt).format('MMMM Do, YYYY')}.\n${config.manageMessage}`
+        `Your ${body.data.attributes.product_name} subscription${forName ? `for ${forName}` : ''} has been renewed.`,
+        ` You will be charged next on ${dayjs.utc(renewsAt).format('MMMM Do, YYYY')}. ${config.manageMessage}`
     ];
 
     await redis.lpush(`es_subscription:${process.env.BOT_ID}:billing`, JSON.stringify({

@@ -10,7 +10,7 @@ export default async (subscription: SubscriptionI, body: WebhookPayload<CustomDa
 
     const lines = [
         `Welcome back to ${body.data.attributes.product_name}! Your ${body.data.attributes.product_name} `,
-        `subscription ${forName ? `for ${forName}` : ''} has been resumed.\n${config.manageMessage}`
+        `subscription ${forName ? `for ${forName}` : ''} has been resumed. ${config.manageMessage}`
     ];
 
     await redis.lpush(`es_queue:${process.env.BOT_ID}:billing`, JSON.stringify({

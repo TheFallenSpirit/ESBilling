@@ -25,7 +25,7 @@ export default async (body: WebhookPayload<CustomData>) => {
 
         if (subscription.activeUserId === subscription.subscriberId) await redis.lpush(`es_queue:${process.env.BOT_ID}:billing`, JSON.stringify({
             force: true, user: subscription.subscriberId,
-            content: { content: `:tada: Thank you for subscribing to ${planName}! ${benefitsTxt}\n${config.manageMessage}` }
+            content: { content: `:tada: Thank you for subscribing to ${planName}! ${benefitsTxt} ${config.manageMessage}` }
         })); else {
             let activeName = 'unknown user';
             const activeUser = await getUser(subscription.activeUserId!);
@@ -33,7 +33,7 @@ export default async (body: WebhookPayload<CustomData>) => {
 
             const lines = [
                 `:tada: Thank you for gifting ${planName}! `,
-                `Your gift to ${activeName} has been added to your subscriptions.\n${config.manageMessage}`
+                `Your gift to ${activeName} has been added to your subscriptions. ${config.manageMessage}`
             ];
 
             await redis.lpush(`es_queue:${process.env.BOT_ID}:billing`, JSON.stringify({
@@ -59,7 +59,7 @@ export default async (body: WebhookPayload<CustomData>) => {
 
         const lines = [
             `:tada: Thank you for subscribing to ${body.data.attributes.product_name}! `,
-            `Your premium benefits for ${guildName} should be active shortly.\n${config.manageMessage}`
+            `Your premium benefits for ${guildName} should be active shortly. ${config.manageMessage}`
         ];
 
         await redis.lpush(`es_queue:${process.env.BOT_ID}:billing`, JSON.stringify({
