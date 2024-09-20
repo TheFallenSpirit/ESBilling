@@ -12,14 +12,16 @@ export default async (body: WebhookPayload<CustomData>) => {
 
     const subData = {
         status: 'active',
+        _id: body.data.id,
         planId: body.data.attributes.variant_id,
+        planName: body.data.attributes.product_name,
         subscriberId: body.meta.custom_data?.subscriber_id,
         renewsAt: dayjs.utc(body.data.attributes.renews_at).toDate()
     };
 
-    if (body.meta.custom_data!.active_user_id) {
-        subscription = (await Subscription.create({ ...subData, _id: body.data.id, activeUserId: body.meta.custom_data!.active_user_id })).toObject();
+    if (body.meta.custom_data?.active_user_id) {
         const planName = body.data.attributes.product_name;
+        subscription = (await Subscription.create({ ...subData, activeUserId: body.meta.custom_data.active_user_id })).toObject();
 
         if (subscription.activeUserId === subscription.subscriberId) await redis.lpush(`es_queue:${process.env.BOT_ID}:billing`, JSON.stringify({
             force: true, user: subscription.subscriberId,
@@ -49,9 +51,9 @@ export default async (body: WebhookPayload<CustomData>) => {
         };
 
         await updateProfile(subscription.activeUserId!, { $set: { premiumTier: parseInt(body.meta.custom_data!.plan_tier) } });
-    } else if (body.meta.custom_data!.active_guild_id) {
-        subscription = (await Subscription.create({ ...subData, _id: body.data.id, activeGuildId: body.meta.custom_data!.active_guild_id })).toObject();
-        await updateGuild(subscription.activeGuildId!, { premiumTier: parseInt(body.meta.custom_data!.plan_tier) });
+    } else if (body.meta.custom_data?.active_guild_id) {
+        subscription = (await Subscription.create({ ...subData, activeGuildId: body.meta.custom_data.active_guild_id })).toObject();
+        await updateGuild(subscription.activeGuildId!, { premiumTier: parseInt(body.meta.custom_data.plan_tier) });
         const guild = await getGuild(subscription.activeGuildId!);
         const guildName = guild?.name || 'unknown server';
 

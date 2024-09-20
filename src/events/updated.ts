@@ -13,12 +13,12 @@ export default async (body: WebhookPayload<CustomData>) => {
     let newSub = null;
 
     if (subscription.status !== body.data.attributes.status) switch (body.data.attributes.status) {
-        case 'active': newSub = await resume(subscription, body.data); break;
-        case 'cancelled': newSub = await cancel(subscription, body.data); break;
+        case 'active': newSub = await resume(subscription, body); break;
+        case 'cancelled': newSub = await cancel(subscription, body); break;
     };
 
     const renewsAt = dayjs.utc(body.data.attributes.renews_at).toDate();
-    if (subscription.renewsAt !== renewsAt) newSub = await renew(subscription, body.data, renewsAt);
+    if (subscription.renewsAt !== renewsAt) newSub = await renew(subscription, body, renewsAt);
     if (!newSub) newSub = await Subscription.findByIdAndUpdate(subscription._id, { $set: { renewsAt, status: body.data.attributes.status } }, { $new: true });
 
     await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub?.toObject(), replacer));

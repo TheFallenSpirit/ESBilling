@@ -53,6 +53,7 @@ export type Subscription = {
         created_at: string;
         updated_at: string;
         test_mode: boolean;
+        subscription_id?: number;
     };
 };
 

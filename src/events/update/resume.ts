@@ -3,13 +3,13 @@ import { getForName } from '../../helpers';
 import Subscription, { SubscriptionI } from '../../models/Subscription';
 import { redis } from '../../store';
 import config from '../../config';
-import { Subscription as SubscriptionWebhook } from '../../types';
+import { CustomData, WebhookPayload } from '../../types';
 
-export default async (subscription: SubscriptionI, data: SubscriptionWebhook) => {
+export default async (subscription: SubscriptionI, body: WebhookPayload<CustomData>) => {
     const forName = await getForName(subscription);
 
     const lines = [
-        `Welcome back to ${data.attributes.product_name}! Your ${data.attributes.product_name} `,
+        `Welcome back to ${body.data.attributes.product_name}! Your ${body.data.attributes.product_name} `,
         `subscription ${forName ? `for ${forName}` : ''} has been resumed.\n${config.manageMessage}`
     ];
 
@@ -19,6 +19,6 @@ export default async (subscription: SubscriptionI, data: SubscriptionWebhook) =>
 
     return await Subscription.findByIdAndUpdate(subscription._id, {
         $unset: { endsAt: '' },
-        $set: { status: 'active', renewsAt: dayjs.utc(data.attributes.renews_at).toDate() }
+        $set: { status: 'active', renewsAt: dayjs.utc(body.data.attributes.renews_at).toDate() }
     }, { new: true });
 };

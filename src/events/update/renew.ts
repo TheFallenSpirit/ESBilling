@@ -3,13 +3,13 @@ import { getForName } from '../../helpers';
 import Subscription, { SubscriptionI } from '../../models/Subscription';
 import config from '../../config';
 import { redis } from '../../store';
-import { Subscription as SubscriptionWebhook } from '../../types';
+import { CustomData, WebhookPayload } from '../../types';
 
-export default async (subscription: SubscriptionI, data: SubscriptionWebhook, renewsAt: Date) => {
+export default async (subscription: SubscriptionI, body: WebhookPayload<CustomData>, renewsAt: Date) => {
     const forName = await getForName(subscription);
 
     const lines = [
-        `Your ${data.attributes.product_name} subscription${forName ? `for ${forName}` : ''} has been renewed. `,
+        `Your ${body.data.attributes.product_name} subscription${forName ? `for ${forName}` : ''} has been renewed. `,
         `You will be charged next on ${dayjs.utc(renewsAt).format('MMMM Do, YYYY')}.\n${config.manageMessage}`
     ];
 
