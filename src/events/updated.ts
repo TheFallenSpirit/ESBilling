@@ -21,5 +21,7 @@ export default async (body: WebhookPayload<CustomData>) => {
     if (subscription.renewsAt !== renewsAt) newSub = await renew(subscription, body, renewsAt);
     if (!newSub) newSub = await Subscription.findByIdAndUpdate(subscription._id, { $set: { renewsAt, status: body.data.attributes.status } }, { $new: true });
 
+    console.log(newSub, '\n\n', JSON.stringify(newSub?.toObject(), replacer));
+
     await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub?.toObject(), replacer));
 };
