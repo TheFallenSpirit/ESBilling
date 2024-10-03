@@ -7,6 +7,7 @@ export interface SubscriptionI {
 	renewsAt: Date;
 	planId: number;
     planName: string;
+    planPrice?: number;
     subscriberId: string;
 	activeUserId?: string;
 	activeGuildId?: string;
@@ -19,6 +20,7 @@ const subscriptionSchema = new Schema<SubscriptionI>({
     status: { required: true, type: String },
     planId: { required: true, type: Number },
     planName: { required: true, type: String },
+    planPrice: { required: false, type: Number },
     subscriberId: { required: true, type: String },
     activeUserId: { required: false, type: String },
     activeGuildId: { required: false, type: String },

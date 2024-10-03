@@ -54,6 +54,7 @@ export type Subscription = {
         updated_at: string;
         test_mode: boolean;
         subscription_id?: number;
+        total_usd?: number;
     };
 };
 
