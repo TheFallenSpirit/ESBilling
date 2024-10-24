@@ -17,7 +17,7 @@ export default async (body: WebhookPayload<CustomData>) => {
         newSub = await renew(subscription, body, renewsAt.toDate());
     };
 
-    if (!newSub && !['expired', 'unpaid'].includes(subscription.status)) {
+    if (!newSub && body.data.attributes.status !== 'expired') {
         newSub = await Subscription.findByIdAndUpdate(subscription._id, { $set: {
             renewsAt: renewsAt.toDate(),
             status: body.data.attributes.status,
@@ -26,5 +26,5 @@ export default async (body: WebhookPayload<CustomData>) => {
         } }, { $new: true });
     };
 
-    await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub?.toObject(), replacer));
+    if (newSub) await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub.toObject(), replacer));
 };
