@@ -8,9 +8,11 @@ import advancedFormatPlugin from 'dayjs/plugin/advancedFormat.js';
 import { connect } from 'mongoose';
 import subscriptionUpdated from './events/updated';
 import subscriptionCreated from './events/created';
-import subscriptionExpired from './events/update/expired';
 import paymentFail from './events/paymentFail';
 import paymentSuccess from './events/paymentSuccess';
+import subscriptionResumed from './events/update/resume';
+import subscriptionCancelled from './events/update/cancel';
+import subscriptionExpired from './events/update/expired';
 
 if (!process.env.BOT_ID || !process.env.LS_SECRET || !process.env.BOT_TOKEN || !process.env.MONGO_URL || !process.env.REDIS_URL) {
     console.error('[ENV] Please specify BOT_ID, LS_SECRET, BOT_TOKEN, MONGO_URL, and REDIS_URL environment variables!');
@@ -43,9 +45,12 @@ app.post('/', bodyParser.raw({ type: 'application/json' }), async (req, res) => 
     const body: WebhookPayload<CustomData> = JSON.parse(req.body.toString());
 
     switch (body.meta.event_name) {
+        case 'subscription_resumed': await subscriptionResumed(body); break;
+        case 'subscription_expired': await subscriptionExpired(body); break;
         case 'subscription_created': await subscriptionCreated(body); break;
         case 'subscription_updated': await subscriptionUpdated(body); break;
-        // case 'subscription_expired': await subscriptionExpired(body); break;
+        case 'subscription_cancelled': await subscriptionCancelled(body); break;
+
         case 'subscription_payment_failed': await paymentFail(body); break;
         case 'subscription_payment_success': await paymentSuccess(body); break;
     };

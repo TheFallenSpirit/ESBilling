@@ -2,10 +2,13 @@ import dayjs from 'dayjs';
 import { getForName } from '../../helpers';
 import Subscription, { SubscriptionI } from '../../models/Subscription';
 import config from '../../config';
-import { redis } from '../../store';
+import { getSubscription, redis } from '../../store';
 import { CustomData, WebhookPayload } from '../../types';
 
-export default async (subscription: SubscriptionI, body: WebhookPayload<CustomData>) => {
+export default async (body: WebhookPayload<CustomData>) => {
+    const subscription = await getSubscription(body.meta.custom_data?.subscriber_id!, body.data.id);
+    if (!subscription) return;
+    
     const forName = await getForName(subscription);
 
     const lines = [

@@ -1,9 +1,12 @@
 import { getForName, getUser } from '../../helpers';
 import Subscription, { SubscriptionI } from '../../models/Subscription';
-import { redis, updateGuild, updateProfile } from '../../store';
+import { getSubscription, redis, updateGuild, updateProfile } from '../../store';
 import { CustomData, WebhookPayload } from '../../types';
 
-export default async (subscription: SubscriptionI, body: WebhookPayload<CustomData>) => {
+export default async (body: WebhookPayload<CustomData>) => {
+    const subscription = await getSubscription(body.meta.custom_data?.subscriber_id!, body.data.id);
+    if (!subscription) return;
+
     if (subscription.activeUserId) {
         await updateProfile(subscription.activeUserId, { $set: { premiumTier: 0 } });
         if (subscription.activeUserId !== subscription.subscriberId) {
