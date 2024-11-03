@@ -26,5 +26,8 @@ export default async (body: WebhookPayload<CustomData>) => {
         } }, { $new: true });
     };
 
-    if (newSub) await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub.toObject(), replacer));
+    if (newSub) {
+        await redis.del(`es_subscription:${subscription.subscriberId}:${subscription._id}`);
+        await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub.toObject(), replacer));
+    };
 };
