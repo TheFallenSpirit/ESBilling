@@ -50,10 +50,10 @@ export default async (body: WebhookPayload<CustomData>) => {
             }));
         };
 
-        await updateProfile(subscription.activeUserId!, { $set: { premiumTier: parseInt(body.meta.custom_data!.plan_tier) } });
+        await updateProfile(subscription.activeUserId!, { $set: { premiumTier: config.userPlanTiers[body.data.attributes.variant_id] } });
     } else if (body.meta.custom_data?.active_guild_id) {
         subscription = (await Subscription.create({ ...subData, activeGuildId: body.meta.custom_data.active_guild_id })).toObject();
-        await updateGuild(subscription.activeGuildId!, { premiumTier: parseInt(body.meta.custom_data.plan_tier) });
+        await updateGuild(subscription.activeGuildId!, { premiumTier: config.guildPlanTiers[body.data.attributes.variant_id] });
         const guild = await getGuild(subscription.activeGuildId!);
         const guildName = guild?.name || 'unknown server';
 
