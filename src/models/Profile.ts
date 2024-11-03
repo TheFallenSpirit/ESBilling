@@ -16,6 +16,7 @@ export interface ProfileI {
     user: string;
     premiumTier: number;
     binds: Map<string, BindI>;
+    statistics: Map<string, number>;
     chastity: Map<string, ChastityI>;
 };
 
@@ -36,7 +37,8 @@ const profileSchema = new Schema<ProfileI>({
     user: { required: true, type: String },
     premiumTier: { required: true, type: Number, default: 0 },
     binds: { required: true, type: Map, of: bindSchema, default: new Map() },
-    chastity: { required: true, type: Map, of: chastitySchema, default: new Map() }
+    chastity: { required: true, type: Map, of: chastitySchema, default: new Map() },
+	statistics: { required: true, type: Map, of: Number, default: new Map() }
 }, { _id: false, versionKey: false, timestamps: true });
 
 export default model('profiles', profileSchema);
