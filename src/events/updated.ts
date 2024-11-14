@@ -25,23 +25,23 @@ export default async (body: WebhookPayload<CustomData>) => {
             status: body.data.attributes.status,
             planId: body.data.attributes.variant_id,
             planName: body.data.attributes.product_name,
-        } }, { $new: true });
+        } }, { new: true });
     };
 
     if (newSub) {
-        await redis.del(`es_subscription:${subscription.subscriberId}:${subscription._id}`);
         await redis.set(`es_subscription:${subscription.subscriberId}:${subscription._id}`, JSON.stringify(newSub.toObject(), replacer));
 
         if (newSub.activeUserId) {
             const profile = await Profile.findOneAndUpdate(
                 { user: newSub.activeUserId },
-                { premiumTier: config.userPlanTiers[body.data.attributes.variant_id] }
+                { premiumTier: config.userPlanTiers[body.data.attributes.variant_id] },
+                { new: true }
             );
 
             if (profile) {
                 await redis.del(`es_profile:${profile.user}`);
                 await redis.set(`es_profile:${profile.user}`, JSON.stringify(profile.toObject(), replacer));
-            }
+            };
         }
     };
 };
