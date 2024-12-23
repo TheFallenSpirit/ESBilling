@@ -23,6 +23,7 @@ export default async (body: WebhookPayload<CustomData>) => {
 
     await Subscription.findByIdAndDelete(subscription._id);
     await redis.del(`es_subscription:${subscription.subscriberId}:${subscription._id}`);
+    await redis.srem(`es_subscriptions:${subscription.subscriberId}`, `es_subscription:${subscription.subscriberId}:${subscription._id}`);
     const forName = await getForName(subscription);
     
     const lines = [

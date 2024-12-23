@@ -68,4 +68,5 @@ export default async (body: WebhookPayload<CustomData>) => {
     };
 
     await redis.set(`es_subscription:${body.meta.custom_data!.subscriber_id}:${subscription!._id}`, JSON.stringify(subscription, replacer));
+    await redis.sadd(`es_subscriptions:${body.meta.custom_data!.subscriber_id}`, `es_subscription:${body.meta.custom_data!.subscriber_id}:${subscription!._id}`);
 };
