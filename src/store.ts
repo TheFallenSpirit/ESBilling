@@ -42,7 +42,9 @@ export const getSubscription = async (userId: string, subId: string) => {
 
     const dbSubscription = await Subscription.findById(subId);
     if (dbSubscription) {
-        await redis.set(`es_subscription:${subId}`, JSON.stringify(dbSubscription.toObject(), replacer));
+        await redis.sadd(`es_subscriptions:${userId}`, `es_subscription:${userId}:${subId}`);
+        await redis.set(`es_subscription:${userId}:${subId}`, JSON.stringify(dbSubscription.toObject(), replacer));
+
         return dbSubscription.toObject();
     } else await redis.set(`es_cooldown_timed:fetch-subscription:${subId}`, dayjs.utc().add(2, 'weeks').toISOString());
 
