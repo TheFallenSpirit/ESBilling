@@ -11,7 +11,7 @@ export default async (body: WebhookPayload<CustomData>) => {
     let subscription = await getSubscription(body.meta.custom_data!.subscriber_id, body.data.id);
     if (!subscription) return;
 
-    if (body.data.attributes.status === 'unpaid') return await expired(body);
+    if (['unpaid', 'suspended'].includes(body.data.attributes.status)) return await expired(body);
 
     let newSub = null;
     const renewsAt = dayjs.utc(body.data.attributes.renews_at);
@@ -36,7 +36,7 @@ export default async (body: WebhookPayload<CustomData>) => {
                 { user: newSub.activeUserId },
                 { premiumTier: config.userPlanTiers[body.data.attributes.variant_id] },
                 { new: true }
-            );
+            ).catch(() => {});
 
             if (profile) {
                 await redis.del(`es_profile:${profile.user}`);
