@@ -39,18 +39,15 @@ const chastitySchema = new Schema<ChastityI>({
 }, { _id: false, versionKey: false });
 
 // prettier-ignore
-const impairmentsSchema = new Schema<ImpairmentsI>({
-	roleplayEnabled: { required: true, type: Boolean, default: false },
-	roleplayOverrides: { required: true, type: Map, of: Boolean, default: new Map() }
-}, { _id: false, versionKey: false });
-
-// prettier-ignore
 const profileSchema = new Schema<ProfileI>({
     user: { required: true, type: String },
     premiumTier: { required: true, type: Number, default: 0 },
     binds: { required: true, type: Map, of: bindSchema, default: new Map() },
     chastity: { required: true, type: Map, of: chastitySchema, default: new Map() },
-    impairmentsConfig: impairmentsSchema,
+    impairmentsConfig: {
+		roleplayEnabled: { required: true, type: Boolean, default: false },
+		roleplayOverrides: { required: true, type: Map, of: Boolean, default: new Map() }
+	},
 	statistics: { required: true, type: Map, of: Number, default: new Map() }
 }, { _id: false, versionKey: false, timestamps: true });
 
