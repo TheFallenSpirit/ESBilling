@@ -50,7 +50,7 @@ const profileSchema = new Schema<ProfileI>({
     premiumTier: { required: true, type: Number, default: 0 },
     binds: { required: true, type: Map, of: bindSchema, default: new Map() },
     chastity: { required: true, type: Map, of: chastitySchema, default: new Map() },
-    impairmentsConfig: { required: true, type: impairmentsSchema },
+    impairmentsConfig: impairmentsSchema,
 	statistics: { required: true, type: Map, of: Number, default: new Map() }
 }, { _id: false, versionKey: false, timestamps: true });
 
