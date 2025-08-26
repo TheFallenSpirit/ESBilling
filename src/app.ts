@@ -58,5 +58,5 @@ app.post('/', bodyParser.raw({ type: 'application/json' }), async (req, res) => 
     return res.status(201).send();
 });
 
-app.listen(3000, '0.0.0.0');
+app.listen(7000, '0.0.0.0');
 console.log('[SERVER] Listening for requests on http://0.0.0.0:3000.');
