@@ -8,7 +8,10 @@ import Profile from '../models/Profile';
 import config from '../config';
 
 export default async (body: WebhookPayload<CustomData>) => {
-    let subscription = await getSubscription(body.meta.custom_data!.subscriber_id, body.data.id);
+    const subscriberId = body.meta.custom_data?.subscriber_id;
+    if (!subscriberId) return;
+
+    let subscription = await getSubscription(subscriberId, body.data.id);
     if (!subscription) return;
 
     if (['unpaid', 'suspended'].includes(body.data.attributes.status)) return await expired(body);
